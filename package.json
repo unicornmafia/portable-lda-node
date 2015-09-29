@@ -1,0 +1,14 @@
+{
+  "name": "PluginRegistry",
+  "version": "4.6.0-SNAPSHOT",
+  "git hash": null,
+  "private": true,
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "3.2.4"
+  },
+  "devDependencies": {
+  }
+}
