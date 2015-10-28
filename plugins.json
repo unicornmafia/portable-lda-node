@@ -1,9 +1,10 @@
 {
 "plugins": [
     {
-      "url" : "http://localhost:8080/edap/rest/riptide",
-      "label" : "Riptide Documents",
-      "description" : "This EDAP interfaces with the Riptide ecosystem to return Savanna type documents."
+      "url" : "http://docker-registry:6000/feeds/rest/rss",
+      "label" : "RSS Feed Plugin",
+      "description" : "Plugin for accessing RSS feeds.",
+      "pluginType" : "FEED"
     }
   ]
 }
