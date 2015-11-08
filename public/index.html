@@ -1,15 +1,17 @@
 <!doctype html>
 <html ng-app>
 	<head>
-		<title>Hello AngularJS</title>
+		<title>LDA Sim Query</title>
 		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.8/angular.min.js"></script>
-    	<script src="hello.js"></script>
+    	<script src="lda.js"></script>
 	</head>
 
 	<body>
-		<div ng-controller="Hello">
-			<p>The ID is {{greeting.id}}</p>
-			<p>The content is {{greeting.content}}</p>
+		<div ng-controller="Lda">
+			LDA Sim Query<br/>
+			<input  ng-model="simz" type="text"/>
+			<button ng-click="get_sims()">Get Sims</button><br/>
+			<textarea ng-model="snippet" cols="60" rows="3"></textarea>
 		</div>
 	</body>
 </html>
