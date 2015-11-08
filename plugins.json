@@ -1,7 +1,7 @@
 {
 "plugins": [
     {
-      "url" : "http://docker-registry:6000/feeds/rest/rss",
+      "url" : "http://localhost:8080/feeds/rest/rss",
       "label" : "RSS Feed Plugin",
       "description" : "Plugin for accessing RSS feeds.",
       "pluginType" : "FEED"

@@ -6,4 +6,4 @@ Clone project
 Run 'npm install' in root directory
 Run 'node server.js' from root directory
 
-Test by going to http://localhost:8001/plugins
+Test by going to http://localhost:1337

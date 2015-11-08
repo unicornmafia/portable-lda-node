@@ -1,6 +1,6 @@
 {
-  "name": "PluginRegistry",
-  "version": "4.6.0-SNAPSHOT",
+  "name": "AngularNodeServer",
+  "version": "1.0",
   "git hash": null,
   "private": true,
   "scripts": {
