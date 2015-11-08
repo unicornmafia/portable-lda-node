@@ -2,9 +2,23 @@ function Lda($scope, $http) {
 	$scope.snippet = '';
 	$scope.simz = '';
 
+	$scope.cell = {
+		simmethod: "Cosine"
+	};
+
+	$scope.simmethod = [{
+		name: "Cosine"
+	}, {
+		name: "Hellinger"
+	}];
+
+	$scope.get_sim_method = function () {
+		return $scope.simmethod;
+	};
+
 	$scope.get_sims = function() {
 		// Simple GET request example:
-
+		$scope.snippet = '';
 		var terms = $scope.simz.split(/[ ,]+/);
 
 		$http({
@@ -13,7 +27,7 @@ function Lda($scope, $http) {
 			headers: {
 				'Content-Type': 'application/json'
 			},
-			data: {"terms": terms}
+			data: {"terms": terms, "simmethod": $scope.cell.simmethod}
 
 		}).then(function successCallback(response) {
 			$scope.snippet = response.data;
