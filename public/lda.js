@@ -1,6 +1,9 @@
 function Lda($scope, $http) {
 	$scope.snippet = '';
 	$scope.simz = '';
+	$scope.simList = []; //[{id:1, name: 'Template1', sim: 0.1}, {id:2, name: 'Another Template', sim:0.2}]
+	$scope.selectedSim = {};
+	$scope.selectedState = "notSelected";
 
 	$scope.cell = {
 		simmethod: "Cosine"
@@ -11,6 +14,49 @@ function Lda($scope, $http) {
 	}, {
 		name: "Hellinger"
 	}];
+
+    $scope.onBlur = function(list) {
+        $scope.lastSelected.selectedState = 'notSelected';
+		console.log("FOOOOO")
+    };
+
+	$scope.setValue = function(list) {
+        if ($scope.lastSelected) {
+            $scope.lastSelected.selected = '';
+        }
+        this.selectedState = 'selected';
+        if ($scope.lastSelected != null){
+            $scope.lastSelected.selectedState = 'notSelected';
+        }
+        $scope.lastSelected = this;
+
+
+		$scope.selectedSim.id = list.id;
+		$scope.selectedSim.name = list.name;
+        $scope.selectedSim.sim = list.sim;
+        //alert($scope.selectedSim.name)
+
+        // Simple GET request example:
+        $scope.snippet = '';
+
+        $http({
+            method: 'GET',
+            url: 'http://127.0.0.1:1338/document/' + list.name,
+            headers: {
+                'Content-Type': 'text/plain'
+            }
+
+        }).then(function successCallback(response) {
+            $scope.snippet = response.data;
+
+        }, function errorCallback(response) {
+            // called asynchronously if an error occurs
+            // or server returns response with an error status.
+            alert('Error retrieving document')
+            $scope.snippet = "ERROR"
+        });
+
+	};
 
 	$scope.get_sim_method = function () {
 		return $scope.simmethod;
@@ -30,7 +76,7 @@ function Lda($scope, $http) {
 			data: {"terms": terms, "simmethod": $scope.cell.simmethod}
 
 		}).then(function successCallback(response) {
-			$scope.snippet = response.data;
+            $scope.simList = response.data;
 
 		}, function errorCallback(response) {
 			// called asynchronously if an error occurs

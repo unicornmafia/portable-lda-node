@@ -2,19 +2,64 @@
 <html ng-app>
 	<head>
 		<title>LDA Sim Query</title>
+        <link rel="stylesheet" type="text/css" href="lda.css">
 		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.8/angular.min.js"></script>
     	<script src="lda.js"></script>
 	</head>
 
 	<body>
-		<div ng-controller="Lda">
-			LDA Sim Query<br/>
-			<input  ng-model="simz" type="text"/><br/>
-            <label class="radio" ng-repeat="eval in get_sim_method()">
-                <input type="radio" ng-model="cell.simmethod" name="simOptions" value="{{eval.name}}">{{eval.name}}
-            </label><br/>
-			<button ng-click="get_sims()">Get Sims</button><br/>
-			<textarea ng-model="snippet" cols="60" rows="3"></textarea>
-		</div>
+
+      <div ng-controller="Lda">
+          <!-- overall page -->
+          <table class="mainpanel">
+              <tr> <!-- only row for this table-->
+                  <td>  <!-- left side -->
+                      <div class="leftpanel">
+                          LDA Sim Query<br/>
+                          <input  ng-model="simz" type="text"/><br/>
+                          <label class="radio" ng-repeat="eval in get_sim_method()">
+                              <input type="radio" ng-model="cell.simmethod" name="simOptions" value="{{eval.name}}">{{eval.name}}
+                          </label><br/>
+                          <button ng-click="get_sims()">Get Sims</button><br/><br/>
+
+                          <table class="simlist">
+                              <tr>
+                                  <th>Id</th>
+                                  <th>File</th>
+                                  <th>Similarity</th>
+                              </tr>
+                              <tr ng-repeat="list in simList" ng-click="setValue(list)" class="{{selectedState}}">
+                                  <td>{{list.id}}</td>
+                                  <td>{{list.name}}</td>
+                                  <td>{{list.sim}}</td>
+                              </tr>
+                          </table>
+
+                          <textarea ng-model="snippet"/>
+                      </div>
+                  </td>
+                  <td> <!-- middle  -->
+                      <div class="middlepanel">
+                          Bad Docs <br/>
+                          <!--ul>
+                              <li ng-repeat="list in templateList" ng-click="setValue(list)">{{list.name}}</li>
+                          </ul-->
+                      </div>
+                  </td>
+                  <td> <!-- right side -->
+                      <div class="rightpanel">
+                          Good Docs <br/>
+                          <!--ul>
+                              <li ng-repeat="list in templateList" ng-click="setValue(list)">{{list.name}}</li>
+                          </ul-->
+                      </div>
+                  </td>
+              </tr>
+          </table>
+      </div>
+
+
+
+
 	</body>
 </html>

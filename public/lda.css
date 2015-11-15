@@ -1,0 +1,51 @@
+.simlist {
+    border: 1px solid #666;
+    padding: 3px;
+    width: 100%;
+}
+th {
+    background: #e8e8e8;
+    font-weight: bold;
+    padding: 2px;
+    text-align: left
+}
+textarea {
+    width: 100%;
+    padding: 0;
+    margin: 0
+}
+
+.notSelected {
+    background-color: white;
+}
+
+.selected {
+    background-color: #f8f8f8;
+}
+
+
+.mainpanel {
+    width: 100%;
+    padding: 0;
+    margin: 0
+}
+
+.leftpanel {
+    width: 34%;
+    padding: 0;
+    margin: 0
+}
+
+.middlepanel {
+    width: 33%;
+    left: 34%
+    padding: 0;
+    margin: 0
+}
+
+.rightpanel {
+    width: 33%;
+    left: 67%
+    padding: 0;
+    margin: 0
+}
