@@ -18,31 +18,33 @@ function Lda($scope, $http) {
     $scope.gooddocs = [];
 
     $scope.baddocs = [];
+    
 
-    $scope.onBlur = function(list) {
-        $scope.lastSelected.selectedState = 'notSelected';
+    $scope.plusoneclick = function(doc) {
+        $scope.removeFrom(doc.name, $scope.baddocs);
+        $scope.addToListIfNotAlreadyInList(doc.name, $scope.gooddocs);
+    };
+
+    $scope.minusoneclick = function(doc) {
+        $scope.removeFrom(doc.name, $scope.gooddocs);
+        $scope.addToListIfNotAlreadyInList(doc.name, $scope.baddocs);
+    };
+
+    $scope.zeroclick = function(doc) {
+        $scope.removeFrom(doc.name, $scope.gooddocs);
+        $scope.removeFrom(doc.name, $scope.baddocs);
+    };
+
+    $scope.removefromgooddocs = function(doc) {
+        $scope.removeFrom(doc.name, $scope.gooddocs);
+    };
+
+    $scope.removefrombaddocs = function(doc) {
+        $scope.removeFrom(doc.name, $scope.baddocs);
     };
 
 
-    $scope.plusoneclick = function(list) {
-        $scope.removeFrom(list.name, $scope.gooddocs);
-        $scope.removeFrom(list.name, $scope.baddocs);
-        $scope.gooddocs.push({name: list.name});
-    };
-
-    $scope.minusoneclick = function(list) {
-        $scope.removeFrom(list.name, $scope.gooddocs);
-        $scope.removeFrom(list.name, $scope.baddocs);
-        $scope.baddocs.push({name: list.name});
-    };
-
-    $scope.zeroclick = function(list) {
-        $scope.removeFrom(list.name, $scope.gooddocs);
-        $scope.removeFrom(list.name, $scope.baddocs);
-    };
-
-
-	$scope.setValue = function(list) {
+    $scope.setValue = function(list) {
         if ($scope.lastSelected) {
             $scope.lastSelected.selected = '';
         }
@@ -108,6 +110,15 @@ function Lda($scope, $http) {
 		});
 
 	};
+
+    $scope.addToListIfNotAlreadyInList = function(item, list) {
+        for (var i = 0; i < list.length; i++) {
+            if (list[i].name == item){
+                return;
+            }
+        }
+        list.push({name: item});
+    };
 
     $scope.removeFrom = function(item, list) {
         for (var i = 0; i < list.length; i++) {

@@ -15,23 +15,25 @@
               <tr> <!-- only row for this table-->
                   <td class="subpanels">  <!-- left side -->
                       <div>
-                          LDA Sim Query<br/>
-                          <input  ng-model="simz" type="text"/><br/>
+                          <div class="header">
+                              LDA Sim Query<br/>
+                          </div>
+                          <input  id="termbox" ng-model="simz" type="text"/><br/>
                           <label class="radio" ng-repeat="eval in get_sim_method()">
                               <input type="radio" ng-model="cell.simmethod" name="simOptions" value="{{eval.name}}">{{eval.name}}
                           </label><br/>
-                          <button ng-click="get_sims()">Get Sims</button><br/><br/>
+                          <button class="doclistbutton" ng-click="get_sims()">Get Sims</button><br/><br/>
 
                           <table class="simlist">
                               <tr>
-                                  <th>File</th>
+                                  <th>Document</th>
                                   <th>Similarity</th>
                                   <th></th>
                                   <th>Bias</th>
                                   <th></th>
                               </tr>
                               <tr ng-repeat="list in simList" ng-click="setValue(list)" class="{{selectedState}}">
-]                                  <td>{{list.name}}</td>
+                                  <td>{{list.name}}</td>
                                   <td>{{list.sim}}</td>
                                   <td>
                                       <button id="btn1" class="listbutton" ng-click="plusoneclick(list)">+1</button>
@@ -40,7 +42,7 @@
                                       <button id="btn2" class="listbutton" ng-click="zeroclick(list)">0</button>
                                   </td>
                                   <td>
-                                      <button id="btn2" class="listbutton" ng-click="minusoneclick(list)">-1</button>
+                                      <button id="btn3" class="listbutton" ng-click="minusoneclick(list)">-1</button>
                                   </td>
                               </tr>
                           </table>
@@ -50,18 +52,34 @@
                   </td>
                   <td class="subpanels"> <!-- middle  -->
                       <div>
-                          Bad Docs <br/>
-                          <ul>
-                              <li ng-repeat="gooddoc in gooddocs">{{gooddoc.name}}</li>
-                          </ul>
+                          <div class="header">
+                            Find More Documents Like This <br/>
+                          </div>
+
+                          <table class="doclist">
+                              <tr ng-repeat="gooddoc in gooddocs">
+                                  <td>{{gooddoc.name}}</td>
+                                  <td>
+                                      <button id="x" class="doclistbutton" ng-click="removefromgooddocs(gooddoc)">x</button>
+                                  </td>
+                              </tr>
+                          </table>
+
                       </div>
                   </td>
                   <td class="subpanels"> <!-- right side -->
                       <div>
-                          Good Docs <br/>
-                          <ul>
-                              <li ng-repeat="baddoc in baddocs">{{baddoc.name}}</li>
-                          </ul>
+                          <div class="header">
+                            Find Less Documents Like This<br/>
+                          </div>
+                          <table class="doclist">
+                              <tr ng-repeat="baddoc in baddocs">
+                                  <td>{{baddoc.name}}</td>
+                                  <td>
+                                      <button id="x" class="doclistbutton" ng-click="removefrombaddocs(baddoc)">x</button>
+                                  </td>
+                              </tr>
+                          </table>
                       </div>
                   </td>
               </tr>
