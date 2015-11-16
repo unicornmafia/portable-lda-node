@@ -13,8 +13,8 @@
           <!-- overall page -->
           <table class="mainpanel">
               <tr> <!-- only row for this table-->
-                  <td>  <!-- left side -->
-                      <div class="leftpanel">
+                  <td class="subpanels">  <!-- left side -->
+                      <div>
                           LDA Sim Query<br/>
                           <input  ng-model="simz" type="text"/><br/>
                           <label class="radio" ng-repeat="eval in get_sim_method()">
@@ -24,34 +24,44 @@
 
                           <table class="simlist">
                               <tr>
-                                  <th>Id</th>
                                   <th>File</th>
                                   <th>Similarity</th>
+                                  <th></th>
+                                  <th>Bias</th>
+                                  <th></th>
                               </tr>
                               <tr ng-repeat="list in simList" ng-click="setValue(list)" class="{{selectedState}}">
-                                  <td>{{list.id}}</td>
-                                  <td>{{list.name}}</td>
+]                                  <td>{{list.name}}</td>
                                   <td>{{list.sim}}</td>
+                                  <td>
+                                      <button id="btn1" class="listbutton" ng-click="plusoneclick(list)">+1</button>
+                                  </td>
+                                  <td>
+                                      <button id="btn2" class="listbutton" ng-click="zeroclick(list)">0</button>
+                                  </td>
+                                  <td>
+                                      <button id="btn2" class="listbutton" ng-click="minusoneclick(list)">-1</button>
+                                  </td>
                               </tr>
                           </table>
 
-                          <textarea ng-model="snippet"/>
+                          <textarea class="doctext">{{doctext}}</textarea>
                       </div>
                   </td>
-                  <td> <!-- middle  -->
-                      <div class="middlepanel">
+                  <td class="subpanels"> <!-- middle  -->
+                      <div>
                           Bad Docs <br/>
-                          <!--ul>
-                              <li ng-repeat="list in templateList" ng-click="setValue(list)">{{list.name}}</li>
-                          </ul-->
+                          <ul>
+                              <li ng-repeat="gooddoc in gooddocs">{{gooddoc.name}}</li>
+                          </ul>
                       </div>
                   </td>
-                  <td> <!-- right side -->
-                      <div class="rightpanel">
+                  <td class="subpanels"> <!-- right side -->
+                      <div>
                           Good Docs <br/>
-                          <!--ul>
-                              <li ng-repeat="list in templateList" ng-click="setValue(list)">{{list.name}}</li>
-                          </ul-->
+                          <ul>
+                              <li ng-repeat="baddoc in baddocs">{{baddoc.name}}</li>
+                          </ul>
                       </div>
                   </td>
               </tr>

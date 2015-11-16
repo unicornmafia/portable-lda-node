@@ -1,9 +1,9 @@
 function Lda($scope, $http) {
-	$scope.snippet = '';
-	$scope.simz = '';
+	$scope.simz = 'foo bar dog cat';
 	$scope.simList = []; //[{id:1, name: 'Template1', sim: 0.1}, {id:2, name: 'Another Template', sim:0.2}]
 	$scope.selectedSim = {};
 	$scope.selectedState = "notSelected";
+	$scope.doctext = "";
 
 	$scope.cell = {
 		simmethod: "Cosine"
@@ -15,10 +15,32 @@ function Lda($scope, $http) {
 		name: "Hellinger"
 	}];
 
+    $scope.gooddocs = [];
+
+    $scope.baddocs = [];
+
     $scope.onBlur = function(list) {
         $scope.lastSelected.selectedState = 'notSelected';
-		console.log("FOOOOO")
     };
+
+
+    $scope.plusoneclick = function(list) {
+        $scope.removeFrom(list.name, $scope.gooddocs);
+        $scope.removeFrom(list.name, $scope.baddocs);
+        $scope.gooddocs.push({name: list.name});
+    };
+
+    $scope.minusoneclick = function(list) {
+        $scope.removeFrom(list.name, $scope.gooddocs);
+        $scope.removeFrom(list.name, $scope.baddocs);
+        $scope.baddocs.push({name: list.name});
+    };
+
+    $scope.zeroclick = function(list) {
+        $scope.removeFrom(list.name, $scope.gooddocs);
+        $scope.removeFrom(list.name, $scope.baddocs);
+    };
+
 
 	$scope.setValue = function(list) {
         if ($scope.lastSelected) {
@@ -37,7 +59,7 @@ function Lda($scope, $http) {
         //alert($scope.selectedSim.name)
 
         // Simple GET request example:
-        $scope.snippet = '';
+        $scope.doctext = '';
 
         $http({
             method: 'GET',
@@ -47,13 +69,13 @@ function Lda($scope, $http) {
             }
 
         }).then(function successCallback(response) {
-            $scope.snippet = response.data;
+            $scope.doctext = response.data;
 
         }, function errorCallback(response) {
             // called asynchronously if an error occurs
             // or server returns response with an error status.
             alert('Error retrieving document')
-            $scope.snippet = "ERROR"
+            $scope.doctext = "ERROR"
         });
 
 	};
@@ -64,7 +86,7 @@ function Lda($scope, $http) {
 
 	$scope.get_sims = function() {
 		// Simple GET request example:
-		$scope.snippet = '';
+		$scope.doctext = '';
 		var terms = $scope.simz.split(/[ ,]+/);
 
 		$http({
@@ -82,11 +104,20 @@ function Lda($scope, $http) {
 			// called asynchronously if an error occurs
 			// or server returns response with an error status.
 			alert('Error querying LDA server')
-			$scope.snippet = "ERROR"
+			$scope.doctext = "ERROR"
 		});
 
 	};
 
+    $scope.removeFrom = function(item, list) {
+        for (var i = 0; i < list.length; i++) {
+            if (list[i].name == item){
+                list.splice(i,1);
+                return;
+            }
+        }
+    };
 
+    $scope.get_sims();
 
 }
