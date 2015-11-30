@@ -18,9 +18,9 @@
                           <div class="header">
                               LDA Sim Query<br/>
                           </div>
-                          <input  id="termbox" ng-model="simz" type="text"/><br/>
+                          <input  id="termbox" ng-model="queryTerms" type="text"/><br/>
                           <label class="radio" ng-repeat="eval in get_sim_method()">
-                              <input type="radio" ng-model="cell.simmethod" name="simOptions" value="{{eval.name}}">{{eval.name}}
+                              <input type="radio" ng-model="cell.simMethod" name="simOptions" value="{{eval.name}}">{{eval.name}}
                           </label><br/>
                           <button class="doclistbutton" ng-click="get_sims()">Get Sims</button><br/><br/>
 
@@ -47,7 +47,7 @@
                               </tr>
                           </table>
 
-                          <textarea class="doctext">{{doctext}}</textarea>
+                          <textarea class="doctext">{{docText}}</textarea>
                       </div>
                   </td>
                   <td class="subpanels"> <!-- middle  -->
@@ -57,10 +57,10 @@
                           </div>
 
                           <table class="doclist">
-                              <tr ng-repeat="gooddoc in gooddocs">
-                                  <td>{{gooddoc.name}}</td>
+                              <tr ng-repeat="goodDoc in goodDocs">
+                                  <td>{{goodDoc.name}}</td>
                                   <td>
-                                      <button id="x" class="doclistbutton" ng-click="removefromgooddocs(gooddoc)">x</button>
+                                      <button id="x" class="doclistbutton" ng-click="removefromgooddocs(goodDoc)">x</button>
                                   </td>
                               </tr>
                           </table>
@@ -73,10 +73,10 @@
                             Find Less Documents Like This<br/>
                           </div>
                           <table class="doclist">
-                              <tr ng-repeat="baddoc in baddocs">
-                                  <td>{{baddoc.name}}</td>
+                              <tr ng-repeat="badDoc in badDocs">
+                                  <td>{{badDoc.name}}</td>
                                   <td>
-                                      <button id="x" class="doclistbutton" ng-click="removefrombaddocs(baddoc)">x</button>
+                                      <button id="x" class="doclistbutton" ng-click="removefrombaddocs(badDoc)">x</button>
                                   </td>
                               </tr>
                           </table>

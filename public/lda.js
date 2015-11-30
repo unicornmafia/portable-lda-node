@@ -1,46 +1,46 @@
 function Lda($scope, $http) {
-	$scope.simz = 'foo bar dog cat';
+	$scope.queryTerms = 'foo bar dog cat';
 	$scope.simList = []; //[{id:1, name: 'Template1', sim: 0.1}, {id:2, name: 'Another Template', sim:0.2}]
 	$scope.selectedSim = {};
 	$scope.selectedState = "notSelected";
-	$scope.doctext = "";
+	$scope.docText = "";
 
 	$scope.cell = {
-		simmethod: "Cosine"
+		simMethod: "Cosine"
 	};
 
-	$scope.simmethod = [{
+	$scope.simMethod = [{
 		name: "Cosine"
 	}, {
 		name: "Hellinger"
 	}];
 
-    $scope.gooddocs = [];
-
-    $scope.baddocs = [];
-    
+    $scope.goodDocs = [];
+    $scope.badDocs = [];
+    $scope.goodTerms = [];
+    $scope.badTerms = [];
 
     $scope.plusoneclick = function(doc) {
-        $scope.removeFrom(doc.name, $scope.baddocs);
-        $scope.addToListIfNotAlreadyInList(doc.name, $scope.gooddocs);
+        $scope.removeFrom(doc.name, $scope.badDocs);
+        $scope.addToListIfNotAlreadyInList(doc.name, $scope.goodDocs);
     };
 
     $scope.minusoneclick = function(doc) {
-        $scope.removeFrom(doc.name, $scope.gooddocs);
-        $scope.addToListIfNotAlreadyInList(doc.name, $scope.baddocs);
+        $scope.removeFrom(doc.name, $scope.goodDocs);
+        $scope.addToListIfNotAlreadyInList(doc.name, $scope.badDocs);
     };
 
     $scope.zeroclick = function(doc) {
-        $scope.removeFrom(doc.name, $scope.gooddocs);
-        $scope.removeFrom(doc.name, $scope.baddocs);
+        $scope.removeFrom(doc.name, $scope.goodDocs);
+        $scope.removeFrom(doc.name, $scope.badDocs);
     };
 
     $scope.removefromgooddocs = function(doc) {
-        $scope.removeFrom(doc.name, $scope.gooddocs);
+        $scope.removeFrom(doc.name, $scope.goodDocs);
     };
 
     $scope.removefrombaddocs = function(doc) {
-        $scope.removeFrom(doc.name, $scope.baddocs);
+        $scope.removeFrom(doc.name, $scope.badDocs);
     };
 
 
@@ -61,7 +61,7 @@ function Lda($scope, $http) {
         //alert($scope.selectedSim.name)
 
         // Simple GET request example:
-        $scope.doctext = '';
+        $scope.docText = '';
 
         $http({
             method: 'GET',
@@ -71,34 +71,40 @@ function Lda($scope, $http) {
             }
 
         }).then(function successCallback(response) {
-            $scope.doctext = response.data;
+            $scope.docText = response.data;
 
         }, function errorCallback(response) {
             // called asynchronously if an error occurs
             // or server returns response with an error status.
             alert('Error retrieving document')
-            $scope.doctext = "ERROR"
+            $scope.docText = "ERROR"
         });
 
 	};
 
 	$scope.get_sim_method = function () {
-		return $scope.simmethod;
+		return $scope.simMethod;
 	};
 
 	$scope.get_sims = function() {
 		// Simple GET request example:
-		$scope.doctext = '';
-		var terms = $scope.simz.split(/[ ,]+/);
-
+		$scope.docText = '';
+		var terms = $scope.queryTerms.split(/[ ,]+/);
+        var json_data = {"query_terms": terms,
+                "sim_method": $scope.cell.simMethod,
+                "good_doc_ids": $scope.goodDocs,
+                "bad_doc_ids": $scope.badDocs,
+                "good_terms": $scope.goodTerms,
+                "bad_terms": $scope.badTerms
+            };
+        console.log(json_data);
 		$http({
 			method: 'POST',
-			url: 'http://127.0.0.1:1338/get-term-sim',
+			url: 'http://127.0.0.1:1338/get-sims-from-concept',
 			headers: {
 				'Content-Type': 'application/json'
 			},
-			data: {"terms": terms, "simmethod": $scope.cell.simmethod}
-
+			data: json_data
 		}).then(function successCallback(response) {
             $scope.simList = response.data;
 
@@ -106,7 +112,7 @@ function Lda($scope, $http) {
 			// called asynchronously if an error occurs
 			// or server returns response with an error status.
 			alert('Error querying LDA server')
-			$scope.doctext = "ERROR"
+			$scope.docText = "ERROR"
 		});
 
 	};
