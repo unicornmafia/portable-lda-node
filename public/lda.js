@@ -6,14 +6,16 @@ function Lda($scope, $http) {
 	$scope.docText = "";
 
 	$scope.cell = {
-		simMethod: "Cosine"
+		simMethod: "Euclidean"
 	};
 
 	$scope.simMethod = [{
 		name: "Cosine"
 	}, {
 		name: "Hellinger"
-	}];
+	},{
+        name: "Euclidean"
+    }];
 
     $scope.goodDocs = [];
     $scope.badDocs = [];
