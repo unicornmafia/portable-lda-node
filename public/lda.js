@@ -1,6 +1,23 @@
+var host = "lda.marshbot.com";
+//var host = "localhost";
+
+var unescape_data = function(simArray){
+
+    for (var i = 0; i < simArray.length; i++) {
+        originalName = simArray[i]["name"];
+        newName = decodeURIComponent(originalName)
+        console.log(originalName)
+        console.log(newName)
+        simArray[i]["name"] = newName;
+        console.log()
+    }
+
+    return simArray
+};
+
 function Lda($scope, $http) {
 	$scope.queryTerms = 'foo bar dog cat';
-	$scope.simList = []; //[{id:1, name: 'Template1', sim: 0.1}, {id:2, name: 'Another Template', sim:0.2}]
+	$scope.simList = []; //[{id:1, fileid: "0012", name: 'Template1', sim: 0.1}, {id:2, fileid: "0013", name: 'Another Template', sim:0.2}]
 	$scope.selectedSim = {};
 	$scope.selectedState = "notSelected";
 	$scope.docText = "";
@@ -24,25 +41,25 @@ function Lda($scope, $http) {
 
     $scope.plusoneclick = function(doc) {
         $scope.removeFrom(doc.name, $scope.badDocs);
-        $scope.addToListIfNotAlreadyInList(doc.name, $scope.goodDocs);
+        $scope.addToListIfNotAlreadyInList(doc, $scope.goodDocs);
     };
 
     $scope.minusoneclick = function(doc) {
         $scope.removeFrom(doc.name, $scope.goodDocs);
-        $scope.addToListIfNotAlreadyInList(doc.name, $scope.badDocs);
+        $scope.addToListIfNotAlreadyInList(doc, $scope.badDocs);
     };
 
     $scope.zeroclick = function(doc) {
-        $scope.removeFrom(doc.name, $scope.goodDocs);
-        $scope.removeFrom(doc.name, $scope.badDocs);
+        $scope.removeFrom(doc, $scope.goodDocs);
+        $scope.removeFrom(doc, $scope.badDocs);
     };
 
     $scope.removefromgooddocs = function(doc) {
-        $scope.removeFrom(doc.name, $scope.goodDocs);
+        $scope.removeFrom(doc, $scope.goodDocs);
     };
 
     $scope.removefrombaddocs = function(doc) {
-        $scope.removeFrom(doc.name, $scope.badDocs);
+        $scope.removeFrom(doc, $scope.badDocs);
     };
 
 
@@ -67,7 +84,7 @@ function Lda($scope, $http) {
 
         $http({
             method: 'GET',
-            url: 'http://127.0.0.1:1338/document/' + list.name,
+            url: 'http://' + host + ':1338/document/' + list.fileid,
             headers: {
                 'Content-Type': 'text/plain'
             }
@@ -102,13 +119,13 @@ function Lda($scope, $http) {
         console.log(json_data);
 		$http({
 			method: 'POST',
-			url: 'http://127.0.0.1:1338/get-sims-from-concept',
+			url: 'http://' + host + ':1338/get-sims-from-concept',
 			headers: {
 				'Content-Type': 'application/json'
 			},
 			data: json_data
 		}).then(function successCallback(response) {
-            $scope.simList = response.data;
+            $scope.simList = unescape_data(response.data);
 
 		}, function errorCallback(response) {
 			// called asynchronously if an error occurs
@@ -121,16 +138,16 @@ function Lda($scope, $http) {
 
     $scope.addToListIfNotAlreadyInList = function(item, list) {
         for (var i = 0; i < list.length; i++) {
-            if (list[i].name == item){
+            if (list[i].fileid == item.fileid){
                 return;
             }
         }
-        list.push({name: item});
+        list.push(item);
     };
 
     $scope.removeFrom = function(item, list) {
         for (var i = 0; i < list.length; i++) {
-            if (list[i].name == item){
+            if (list[i].fileid == item.fileid){
                 list.splice(i,1);
                 return;
             }
