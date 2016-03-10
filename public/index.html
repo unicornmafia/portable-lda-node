@@ -2,6 +2,13 @@
 <html ng-app>
 	<head>
 		<title>LDA Sim Query</title>
+        
+        <!-- Bootstrap CDN (with jquery) -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
         <link rel="stylesheet" type="text/css" href="lda.css">
 		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.8/angular.min.js"></script>
     	<script src="lda.js"></script>
@@ -9,81 +16,121 @@
 
 	<body>
 
-      <div ng-controller="Lda">
-          <!-- overall page -->
-          <table class="mainpanel">
-              <tr> <!-- only row for this table-->
-                  <td class="subpanels">  <!-- left side -->
-                      <div>
-                          <div class="header">
-                              LDA Sim Query<br/>
-                          </div>
-                          <input  id="termbox" ng-model="queryTerms" type="text"/><br/>
-                          <label class="radio" ng-repeat="eval in get_sim_method()">
-                              <input type="radio" ng-model="cell.simMethod" name="simOptions" value="{{eval.name}}">{{eval.name}}
-                          </label><br/>
-                          <button class="doclistbutton" ng-click="get_sims()">Get Sims</button><br/><br/>
+      <!-- overall page -->
+      <div class="container" ng-controller="Lda">
+          
+            <!-- only row for this table-->
+            <div class="row">
+                
+                <!-- left side -->
+                <div class="col-xs-12 col-sm-4 subpanelss"> 
+                    <div class="header">
+                        <h3>LDA Sim Query</h3>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="termbox">Terms to Include</label>
+                        <input id="termbox" class="form-control" ng-model="queryTerms" type="text"/>
+                    </div>
 
-                          <table class="simlist">
-                              <tr>
-                                  <th>Document</th>
-                                  <th>Similarity</th>
-                                  <th></th>
-                                  <th>Bias</th>
-                                  <th></th>
-                              </tr>
-                              <tr ng-repeat="list in simList" ng-click="setValue(list)" class="{{selectedState}}">
-                                  <td>{{list.name}}</td>
-                                  <td>{{list.sim}}</td>
-                                  <td>
-                                      <button id="btn1" class="listbutton" ng-click="plusoneclick(list)">+1</button>
-                                  </td>
-                                  <td>
-                                      <button id="btn2" class="listbutton" ng-click="zeroclick(list)">0</button>
-                                  </td>
-                                  <td>
-                                      <button id="btn3" class="listbutton" ng-click="minusoneclick(list)">-1</button>
-                                  </td>
-                              </tr>
-                          </table>
+                    <div class="radio inline" ng-repeat="eval in get_sim_method()">
+                        <label>
+                            <input type="radio" ng-model="cell.simMethod" name="simOptions" value="{{eval.name}}">{{eval.name}}
+                        </label>
+                    </div>
+                    
+                    <button id="searchSims" class="btn btn-primary doclistbuttons" ng-click="get_sims()">Get Sims</button>
 
-                          <textarea class="doctext">{{docText}}</textarea>
-                      </div>
-                  </td>
-                  <td class="subpanels"> <!-- middle  -->
-                      <div>
-                          <div class="header">
-                            Find More Documents Like This <br/>
-                          </div>
+                    <div class="header">
+                        <h3>Results</h3>
+                    </div>
 
-                          <table class="doclist">
-                              <tr ng-repeat="goodDoc in goodDocs">
-                                  <td>{{goodDoc.name}}</td>
-                                  <td>
-                                      <button id="x" class="doclistbutton" ng-click="removefromgooddocs(goodDoc)">x</button>
-                                  </td>
-                              </tr>
-                          </table>
+                    <table id="resultList" class="table simlists">
+                        <thead>
+                            <tr>
+                                <th>Document</th>
+                                <th>Similarity</th>
+                                <th class="btn-group-contain">Bias</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="list in simList" ng-click="setValue(list)" class="{{selectedState}}" data="{{list.id}}">
+                                <td>{{list.name}}</td>
+                                <td>{{list.sim}}</td>
+                                <td>
+                                    <div class="btn-group">
+                                        <button id="btn1" class="btn btn-xs btn-primary listbuttons" ng-click="plusoneclick($event,list)">
+                                            <span class="glyphicon glyphicon-plus"></span>
+                                        </button>
+                                        <button id="btn2" class="btn btn-xs btn-primary disabled listbuttons" ng-click="zeroclick($event,list)">0</button>
+                                        <button id="btn3" class="btn btn-xs btn-primary listbuttons" ng-click="minusoneclick($event,list)">
+                                            <span class="glyphicon glyphicon-minus"></span>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="3">
+                                    <img src="ajax-loader.gif">
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
 
-                      </div>
-                  </td>
-                  <td class="subpanels"> <!-- right side -->
-                      <div>
-                          <div class="header">
-                            Find Less Documents Like This<br/>
-                          </div>
-                          <table class="doclist">
-                              <tr ng-repeat="badDoc in badDocs">
-                                  <td>{{badDoc.name}}</td>
-                                  <td>
-                                      <button id="x" class="doclistbutton" ng-click="removefrombaddocs(badDoc)">x</button>
-                                  </td>
-                              </tr>
-                          </table>
-                      </div>
-                  </td>
-              </tr>
-          </table>
+                    
+                </div>
+                  
+                <!-- middle  -->
+                <div class="col-xs-12 col-sm-4 subpanelss">
+                    <div class="header">
+                        <h3>Selection Preview</h3>
+                    </div>
+                    <textarea class="doctext" style="display: none">{{docText}}</textarea>
+                </div>
+
+                <!-- right side -->
+                <div class="col-xs-12 col-sm-4 subpanelss">
+                    <div id="more">
+                        <div class="header">
+                            <h3>Find More Similar Documents</h3>
+                        </div>
+
+                        <table id="moreDocList" class="table doclists">
+                            <tbody>
+                                <tr ng-repeat="goodDoc in goodDocs">
+                                    <td>{{goodDoc.name}}</td>
+                                    <td>
+                                        <button id="x" class="btn btn-xs btn-primary doclistbuttons" ng-click="removefromgooddocs(goodDoc)">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div id="less">
+                        <div class="header">
+                            <h3>Find Fewer Similar Documents</h3>
+                        </div>
+                        
+                        <table id="lessDocList" class="table doclists">
+                            <tbody>
+                                <tr ng-repeat="badDoc in badDocs">
+                                    <td>{{badDoc.name}}</td>
+                                    <td>
+                                        <button id="x" class="btn btn-xs btn-primary doclistbuttons" ng-click="removefrombaddocs(badDoc)">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
       </div>
 
 
